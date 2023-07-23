@@ -4,7 +4,7 @@ import {reactive} from "vue";
 const formData = reactive({
     username: "",
     password: "",
-    remember: false,
+    password_confirmation: '',
 });
 
 /**
@@ -21,6 +21,11 @@ const rules = reactive({
             required: true, message: "该项为必填项", trigger: "blur",
         }
     ],
+    password_confirmation: [
+        {
+            required: true, message: "该项为必填项", trigger: "blur",
+        }
+    ]
 });
 </script>
 
@@ -30,7 +35,7 @@ const rules = reactive({
         <el-row :gutter="20">
             <el-col :span="24">
                 <el-form-item>
-                    <h2 class="text-2xl font-bold text-center w-full">登录</h2>
+                    <h2 class="text-2xl font-bold text-center w-full">注册</h2>
                 </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -46,20 +51,19 @@ const rules = reactive({
                 </el-form-item>
             </el-col>
             <el-col :span="24">
-                <el-form-item>
-                    <div class="flex justify-between items-center w-full">
-                        <el-checkbox v-model="formData.remember" label="记住我" size="small"/>
-                        <el-link type="primary" :underline="false">忘记密码</el-link>
-                    </div>
+                <el-form-item label="确认密码" prop="password_confirmation">
+                    <el-input :input-style="{width: '100%'}" type="password" show-password
+                              v-model="formData.password" placeholder="请输入密码" clearable/>
                 </el-form-item>
             </el-col>
             <el-col :span="24">
                 <el-form-item>
                     <div class="w-full">
-                        <el-button type="primary" class="w-full">登录</el-button>
+                        <el-button type="primary" class="w-full">注册</el-button>
                     </div>
-                    <div class="w-full mt-4">
-                        <el-button type="default" class="w-full" @click="$emit('toRegister')">注册</el-button>
+                    <div class="w-full">
+                        <el-button type="default" class="w-full mt-4" @click="$emit('toLogin')">已有账号？去登录
+                        </el-button>
                     </div>
                 </el-form-item>
             </el-col>

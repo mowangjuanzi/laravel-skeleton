@@ -1,30 +1,18 @@
 <script setup>
 import LoginForm from "./auth/components/loginForm.vue";
+import {ref} from "vue";
+import RegisterForm from "./auth/components/registerForm.vue";
 
-import {reactive} from "vue";
+const isLogin = ref(true);
 
-const formData = reactive({
-    username: "",
-    password: "",
-    remember: false,
-});
+const toRegister = () => {
+    console.log('aaa');
+    isLogin.value = false;
+}
 
-/**
- * 验证规则
- */
-const rules = reactive({
-    username: [
-        {
-            required: true, message: "该项为必填项", trigger: "blur",
-        }
-    ],
-    password: [
-        {
-            required: true, message: "该项为必填项", trigger: "blur",
-        }
-    ],
-});
-
+const toLogin = () => {
+    isLogin.value = true;
+}
 </script>
 
 <template>
@@ -55,7 +43,8 @@ const rules = reactive({
                 <Transition appear class="v-enter-active">
                     <div
                         class="h-full flex items-center m-auto w-full 2xl:max-w-[500px] xl:max-w-[500px] md:max-w-[500px] lg:max-w-[500px]">
-                        <LoginForm/>
+                        <LoginForm v-if="isLogin" @to-register="toRegister"/>
+                        <RegisterForm v-if="!isLogin" @to-login="toLogin"/>
                     </div>
                 </Transition>
             </div>
