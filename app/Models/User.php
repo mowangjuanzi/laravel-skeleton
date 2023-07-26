@@ -3,10 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\NewAccessToken;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class User extends Authenticatable
 {
@@ -52,4 +56,30 @@ class User extends Authenticatable
     protected $attributes = [
         "roles" => '[]',
     ];
+
+    /**
+     * Create a new personal access token for the user.
+     */
+    public function createToken(string $name, array $abilities = ['*'], DateTimeInterface $expiresAt = null): NewAccessToken
+    {
+        $tokens = $this->tokens();
+
+        /** @var PersonalAccessToken $access_token */
+        $access_token = $tokens->where('name', $name)->first();
+
+        if ($access_token) {
+            $access_token['token'] = hash('sha256', $plainTextToken = Str::random(40));
+            $access_token['abilities'] = $abilities;
+            $access_token['expires_at'] = $expiresAt;
+        } else {
+            $access_token = $this->tokens()->create([
+                'name' => $name,
+                'token' => hash('sha256', $plainTextToken = Str::random(40)),
+                'abilities' => $abilities,
+                'expires_at' => $expiresAt,
+            ]);
+        }
+
+        return new NewAccessToken($access_token, $access_token->getKey() . '|' . $plainTextToken);
+    }
 }
