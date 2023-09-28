@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix("auth")->group(function () {
-    Route::post("register", [AuthController::class, 'register']);
-    Route::post("login", [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+/**
+ * 会话管理
+ */
+Route::prefix('session')->group(function () {
+    Route::post("register", [SessionController::class, 'register']);
+    Route::post('login', [SessionController::class, 'login']);
+    Route::delete('/', [SessionController::class, 'destroy']);
 });

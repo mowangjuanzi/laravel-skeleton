@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <h1 class="text-3xl font-bold underline">Layout</h1>
+    <h1 class="text-[60px] font-bold underline">Layout</h1>
 
     <router-link to="/login">Go to Login</router-link>
 </template>
